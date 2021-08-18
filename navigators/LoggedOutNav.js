@@ -8,9 +8,21 @@ const Stack = createStackNavigator();
 
 export default function LoggedOutNav() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Welcome" component={Welcome} />
-      <Stack.Screen name="Login" component={LogIn} />
+    <Stack.Navigator
+      screenOptions={{
+        title: "HWAMOAK",
+        headerBackTitleVisible: false,
+        headerTintColor: "#333",
+        headerTitle: false,
+        headerTransparent: true,
+      }}
+    >
+      <Stack.Screen
+        name="Welcome"
+        options={{ headerShown: false }}
+        component={Welcome}
+      />
+      <Stack.Screen name="LogIn" component={LogIn} />
       <Stack.Screen name="CreateAccount" component={CreateAccount} />
     </Stack.Navigator>
   );

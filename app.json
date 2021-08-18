@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "instaclone-native",
-    "slug": "instaclone-native",
+    "name": "hwamoak-native",
+    "slug": "hwamoak-native",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "userInterfaceStyle" : "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
