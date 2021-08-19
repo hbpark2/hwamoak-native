@@ -48,7 +48,7 @@ export default ({ navigation }) => {
     register("keyword");
   }, []);
 
-  console.log(watch());
+  // console.log(watch());
 
   return (
     <DismissKeyboard>

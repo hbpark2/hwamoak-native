@@ -34,10 +34,11 @@ export default function App() {
     storage: new AsyncStorageWrapper(AsyncStorage),
   });
 
-
-  //FIXME: 16.1 (LIKE PART 2) persistCache에서 serialize:false 대신 persist.perge 추가함 
+  //FIXME: 16.1 (LIKE PART 2) persistCache에서 serialize:false 대신 persist.perge 추가함
   const preload = async () => {
     const token = await AsyncStorage.getItem("token");
+    console.log("PRELOAD token : " + token);
+
     if (token) {
       isLoggedInVar(true);
       tokenVar(token);
@@ -47,8 +48,10 @@ export default function App() {
       cache,
       storage: new AsyncStorageWrapper(AsyncStorage),
     });
+
     return preloadAssets();
   };
+
   if (loading) {
     return (
       <AppLoading
@@ -59,19 +62,19 @@ export default function App() {
     );
   }
   // console.log(mode);
-
+  console.log(`isLoggedIn : ${isLoggedIn}`);
   return (
     <ApolloProvider client={client}>
-      <AppearanceProvider>
-        <SafeAreaView style={{ backgroundColor: "#fffef2" }}>
-          <StatusBar animated={true} barStyle={"dark-content"} />
-        </SafeAreaView>
-        <ThemeProvider theme={lightTheme}>
-          <NavigationContainer>
-            {isLoggedIn ? <LoggedInNav /> : <LoggedOutNav />}
-          </NavigationContainer>
-        </ThemeProvider>
-      </AppearanceProvider>
+      {/* <AppearanceProvider> */}
+      <SafeAreaView style={{ backgroundColor: "#fffef2" }}>
+        <StatusBar animated={true} barStyle={"dark-content"} />
+      </SafeAreaView>
+      <ThemeProvider theme={lightTheme}>
+        <NavigationContainer>
+          {isLoggedIn ? <LoggedInNav /> : <LoggedOutNav />}
+        </NavigationContainer>
+      </ThemeProvider>
+      {/* </AppearanceProvider> */}
     </ApolloProvider>
   );
 }

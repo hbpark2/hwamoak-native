@@ -12,7 +12,7 @@ import Comments from "../screens/Comments";
 
 const Stack = createStackNavigator();
 
-export default ({ screenName }) => {
+export default function SharedStackNav({ screenName }) {
   return (
     <Stack.Navigator
       headerMode="screen"
@@ -53,4 +53,4 @@ export default ({ screenName }) => {
       <Stack.Screen name="Comments" component={Comments} />
     </Stack.Navigator>
   );
-};
+}

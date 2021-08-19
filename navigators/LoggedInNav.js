@@ -8,7 +8,9 @@ import useMe from "../hook/useMe";
 const Tabs = createBottomTabNavigator();
 
 const LoggedInNav = () => {
-  const { data } = useMe();
+  const { data, loading } = useMe();
+  // console.log(`loading: ${loading}`);
+  // console.log(`data : ${data?.me}`);
   return (
     <Tabs.Navigator
       tabBarOptions={{

@@ -14,12 +14,14 @@ const ME_QUERY = gql`
 
 export default function useMe() {
   const hasToken = useReactiveVar(isLoggedInVar);
+  console.log(`hasToken : ${hasToken}`);
   const { data } = useQuery(ME_QUERY, {
     skip: !hasToken,
   });
+  //FIXME:
   useEffect(() => {
     if (data?.me === null) {
-      logUserOut();
+      // logUserOut();
     }
   }, [data]);
   return { data };

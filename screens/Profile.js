@@ -51,7 +51,7 @@ export default ({ navigation, route }) => {
   }, []);
 
   const renderPhoto = ({ item: photo }) => {
-    console.log(photo);
+    // console.log(photo);
     return (
       <Photo
         id={photo.id}

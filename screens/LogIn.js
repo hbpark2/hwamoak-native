@@ -39,6 +39,7 @@ export default function Login({ route: { params } }) {
       await logUserIn(token);
     }
   };
+  
   const [logInMutation, { loading }] = useMutation(LOGIN_MUTATION, {
     onCompleted,
   });
