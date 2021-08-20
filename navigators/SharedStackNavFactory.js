@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import Photo from "../screens/Photo";
+import Photo from "../screens/PhotoScreen";
 import Profile from "../screens/Profile";
 import Feed from "../screens/Feed";
 import Search from "../screens/Search";

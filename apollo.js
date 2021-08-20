@@ -39,6 +39,9 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+// uri: "http://localhost:4000/graphql",
+// uri: "https://hwamoak-backend.herokuapp.com/graphql",
+
 const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql",
 });

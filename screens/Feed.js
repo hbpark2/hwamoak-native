@@ -7,12 +7,7 @@ import ScreenLayout from "../components/ScreenLayout";
 import { FlatList, Text, View } from "react-native";
 import Photo from "../components/Photo";
 
-const Container = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  background-color: ${(props) => props.theme.background};
-`;
+
 
 const FEED_QUERY = gql`
   query seeFeed($offset: Int!) {

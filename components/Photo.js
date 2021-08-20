@@ -56,14 +56,17 @@ const ExtraContainer = styled.View`
   padding: 10px;
 `;
 
-function Photo({ id, user, caption, file, isLiked, likes }) {
+function Photo({ id, user, caption, file, isLiked, likes, fullView }) {
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
   const [imageHeight, setImageHeight] = useState(height - 450);
+
   useEffect(() => {
-    Image.getSize(file, (width, height) => {
-      setImageHeight(height);
-    });
+    if (file) {
+      Image.getSize(file, (width, height) => {
+        setImageHeight(height);
+      });
+    }
   }, [file]);
 
   const updateToggleLike = (cache, result) => {
@@ -103,16 +106,16 @@ function Photo({ id, user, caption, file, isLiked, likes }) {
 
   const goToProfile = () => {
     navigation.navigate("Profile", {
-      username: user.username,
-      id: user.id,
+      username: user?.username,
+      id: user?.id,
     });
   };
 
   return (
     <Container>
       <Header onPress={goToProfile}>
-        <UserAvatar resizeMode="cover" source={{ uri: user.avatar }} />
-        <Username>{user.username}</Username>
+        <UserAvatar resizeMode="cover" source={{ uri: user?.avatar }} />
+        <Username>{user?.username}</Username>
       </Header>
       <File
         resizeMode="cover"
@@ -146,7 +149,7 @@ function Photo({ id, user, caption, file, isLiked, likes }) {
         </TouchableOpacity>
         <Caption>
           <TouchableOpacity onPress={goToProfile}>
-            <Username>{user.username}</Username>
+            <Username>{user?.username}</Username>
           </TouchableOpacity>
           <CaptionText>{caption}</CaptionText>
         </Caption>
@@ -155,16 +158,17 @@ function Photo({ id, user, caption, file, isLiked, likes }) {
   );
 }
 
-Photo.propTypes = {
-  id: PropTypes.number.isRequired,
-  user: PropTypes.shape({
-    avatar: PropTypes.string,
-    username: PropTypes.string.isRequired,
-  }),
-  caption: PropTypes.string,
-  file: PropTypes.string.isRequired,
-  isLiked: PropTypes.bool.isRequired,
-  likes: PropTypes.number.isRequired,
-  commentNumber: PropTypes.number.isRequired,
-};
+// Photo.propTypes = {
+//   id: PropTypes.number.isRequired,
+//   user: PropTypes.shape({
+//     avatar: PropTypes.string,
+//     username: PropTypes.string.isRequired,
+//   }),
+//   caption: PropTypes.string,
+//   file: PropTypes.string.isRequired,
+//   isLiked: PropTypes.bool.isRequired,
+//   likes: PropTypes.number,
+//   commentNumber: PropTypes.number,
+// };
+
 export default Photo;
