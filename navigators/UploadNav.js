@@ -1,4 +1,5 @@
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import SelectPhoto from "../screens/SelectPhoto";
 import TakePhoto from "../screens/TakePhoto";
@@ -25,11 +26,23 @@ const UploadNav = () => {
           <Stack.Navigator
             screenOptions={{
               headerTintColor: "#333",
-              headerTransparent: true,
-              headerBackTitle: "back",
+              // headerTransparent: true,
+              headerBackTitleVisible: false,
+              headerBackImage: ({ tintColor }) => (
+                <Ionicons color={tintColor} name="close" size={28} />
+              ),
+              headerStyle: {
+                backgroundColor: "#fffef2",
+
+                shadowOpacity: 1,
+              },
             }}
           >
-            <Stack.Screen name="Select" component={SelectPhoto} />
+            <Stack.Screen
+              name="Select"
+              options={{ title: "Choose a photo" }}
+              component={SelectPhoto}
+            />
           </Stack.Navigator>
         )}
       </Tab.Screen>
