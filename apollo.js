@@ -43,7 +43,7 @@ const authLink = setContext((_, { headers }) => {
 // uri: "https://hwamoak-backend.herokuapp.com/graphql",
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: "https://funny-turkey-64.loca.lt/graphql",
 });
 
 export const cache = new InMemoryCache({

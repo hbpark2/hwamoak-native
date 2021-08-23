@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Text, View, TouchableOpacity } from "react-native";
-import { isLoggedInVar, logUserIn } from "../apollo";
+import { logUserIn } from "../apollo";
 import AuthButton from "../components/auth/AuthButton";
 import AuthLayout from "../components/auth/AuthLayout";
 import { TextInput } from "../components/auth/AuthShare";
@@ -27,22 +27,22 @@ export default function Login({ route: { params } }) {
       password: params?.password,
     },
   });
+
   const passwordRef = useRef();
   const onCompleted = async (data) => {
-    // console.log(data);
     const {
       login: { ok, token },
     } = data;
 
     if (ok) {
-      isLoggedInVar(true);
       await logUserIn(token);
     }
   };
-  
+
   const [logInMutation, { loading }] = useMutation(LOGIN_MUTATION, {
     onCompleted,
   });
+
   const onNext = (nextOne) => {
     nextOne?.current?.focus();
   };
@@ -94,11 +94,11 @@ export default function Login({ route: { params } }) {
         onPress={handleSubmit(onValid)}
       />
 
-      <TouchableOpacity onPress={() => navigation.navigate("CreateAccount")}>
+      {/* <TouchableOpacity onPress={() => navigation.navigate("CreateAccount")}>
         <View>
           <Text>Go to CreateAccount</Text>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </AuthLayout>
   );
 }
