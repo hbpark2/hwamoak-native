@@ -4,10 +4,11 @@ import {
   InMemoryCache,
   makeVar,
 } from "@apollo/client";
-
+import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 import { offsetLimitPagination } from "@apollo/client/utilities";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createUploadLink } from "apollo-upload-client";
 
 // OFFICE : 172.30.1.37:4000/graphql
 // AZURE :  https://hwamoak-backend.azurewebsites.net/graphql
@@ -42,8 +43,18 @@ const authLink = setContext((_, { headers }) => {
 // uri: "http://localhost:4000/graphql",
 // uri: "https://hwamoak-backend.herokuapp.com/graphql",
 
-const httpLink = createHttpLink({
-  uri: "https://funny-turkey-64.loca.lt/graphql",
+// uri: "https://dull-rabbit-45.loca.lt/graphql",
+const uploadHttpLink = createUploadLink({
+  uri: "https://hwamoak-backend.herokuapp.com/graphql",
+});
+
+const onErrorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    console.log(`GraphQL Error`, graphQLErrors);
+  }
+  if (networkError) {
+    console.log("Network Error", networkError);
+  }
 });
 
 export const cache = new InMemoryCache({
@@ -56,10 +67,10 @@ export const cache = new InMemoryCache({
   },
 });
 
-const httpLinks = authLink.concat(httpLink);
+const httpLinks = authLink.concat(onErrorLink).concat(uploadHttpLink);
 
 const client = new ApolloClient({
-  link: httpLinks,
+  link: authLink.concat(onErrorLink).concat(uploadHttpLink),
   cache,
 });
 

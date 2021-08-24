@@ -32,7 +32,10 @@ const UserAvatar = styled.Image`
 const Username = styled.Text`
   font-weight: 600;
 `;
-const File = styled.Image``;
+const File = styled.Image`
+  min-height: 300px;
+  max-height: 450px;
+`;
 const Actions = styled.View`
   flex-direction: row;
   align-items: center;
@@ -59,15 +62,15 @@ const ExtraContainer = styled.View`
 function Photo({ id, user, caption, file, isLiked, likes, fullView }) {
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
-  const [imageHeight, setImageHeight] = useState(height - 450);
+  const [imageHeight, setImageHeight] = useState(height - 350);
 
-  useEffect(() => {
-    if (file) {
-      Image.getSize(file, (width, height) => {
-        setImageHeight(height);
-      });
-    }
-  }, [file]);
+  // useEffect(() => {
+  //   if (file) {
+  //     Image.getSize(file, (width, height) => {
+  //       setImageHeight(height);
+  //     });
+  //   }
+  // }, [file]);
 
   const updateToggleLike = (cache, result) => {
     console.log(cache, result);
@@ -151,7 +154,7 @@ function Photo({ id, user, caption, file, isLiked, likes, fullView }) {
           <TouchableOpacity onPress={goToProfile}>
             <Username>{user?.username}</Username>
           </TouchableOpacity>
-          <CaptionText>{caption}</CaptionText>
+          <CaptionText>{caption || ""}</CaptionText>
         </Caption>
       </ExtraContainer>
     </Container>

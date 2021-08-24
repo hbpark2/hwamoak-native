@@ -4,10 +4,9 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragments";
 import ScreenLayout from "../components/ScreenLayout";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, ScrollView, Text, View } from "react-native";
 import Photo from "../components/Photo";
-
-
+import PlantFeed from "./PlantFeed";
 
 const FEED_QUERY = gql`
   query seeFeed($offset: Int!) {
@@ -52,6 +51,7 @@ export default ({ navigation }) => {
   return (
     <ScreenLayout loading={loading}>
       <FlatList
+        ListHeaderComponent={() => <PlantFeed navigation={navigation} />}
         onEndReachedThreshold={0.02}
         onEndReached={() =>
           fetchMore({

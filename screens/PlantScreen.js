@@ -7,6 +7,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import Photo from "../components/Photo";
 import ScreenLayout from "../components/ScreenLayout";
 import { useState } from "react";
+import PlantDetail from "../components/PlantDetail";
 
 const Container = styled.View`
   flex: 1;
@@ -15,31 +16,40 @@ const Container = styled.View`
   background-color: ${(props) => props.theme.background};
 `;
 
-const SEE_PHOTO = gql`
-  query seePhoto($id: Int!) {
-    seePhoto(id: $id) {
-      ...PhotoFragment
+const SEE_PLANT_QUERY = gql`
+  query seePlant($id: Int!) {
+    seePlant(id: $id) {
+      id
+      title
+      caption
+      water
+      sunlight
+      temperatureMin
+      temperatureMax
+      plantDivision
+      plantClass
+      plantOrder
+      plantFamily
+      plantGenus
+      plantSpecies
+      plantHome
+      plantHabitat
+      plantLikes
+      isLiked
       user {
-        id
         username
         avatar
       }
-      caption
-      comments {
-        ...CommentFragment
+      images {
+        file
       }
-      createdAt
-      isMine
     }
   }
-  ${PHOTO_FRAGMENT}
-  ${COMMENT_FRAGMENT}
 `;
-
-const PhotoScreen = ({ route }) => {
-  const { data, loading, refetch } = useQuery(SEE_PHOTO, {
+const PlantScreen = ({ route }) => {
+  const { data, loading, refetch } = useQuery(SEE_PLANT_QUERY, {
     variables: {
-      id: route?.params?.photoId,
+      id: route?.params?.plantId,
     },
   });
 
@@ -66,10 +76,10 @@ const PhotoScreen = ({ route }) => {
           alignItems: "center",
         }}
       >
-        <Photo {...data?.seePhoto} fullView />
+        <PlantDetail {...data?.seePlant} fullView />
       </ScrollView>
     </ScreenLayout>
   );
 };
 
-export default PhotoScreen;
+export default PlantScreen;

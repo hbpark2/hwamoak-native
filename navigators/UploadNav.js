@@ -33,7 +33,6 @@ const UploadNav = () => {
               ),
               headerStyle: {
                 backgroundColor: "#fffef2",
-
                 shadowOpacity: 1,
               },
             }}

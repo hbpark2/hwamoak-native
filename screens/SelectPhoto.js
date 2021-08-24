@@ -5,6 +5,7 @@ import styled from "styled-components/native";
 import {
   FlatList,
   Image,
+  StatusBar,
   Text,
   TouchableOpacity,
   useWindowDimensions,
@@ -80,7 +81,13 @@ const SelectPhoto = ({ navigation }) => {
   }, []);
 
   const HeaderRight = () => (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("UploadForm", {
+          file: chosenPhoto,
+        })
+      }
+    >
       <HeaderRightText>Next</HeaderRightText>
     </TouchableOpacity>
   );
@@ -89,9 +96,9 @@ const SelectPhoto = ({ navigation }) => {
     navigation.setOptions({
       headerRight: HeaderRight,
     });
-  }, []);
+  }, [chosenPhoto]);
 
-  const numColujmns = 4;
+  const numColumns = 4;
 
   const { width } = useWindowDimensions();
 
@@ -99,11 +106,25 @@ const SelectPhoto = ({ navigation }) => {
     setChosenPhoto(uri);
   };
 
+
+  // MAKE FETCHMORE FUNCTION
+  const fetchMore = async () => {
+    const lastId = photos[photos.length - 1].id;
+    const { assets } = await MediaLibrary.getAssetsAsync({
+      after: lastId,
+      // first: 20,
+    });
+
+    let photoArr = photos;
+    photoArr.push(...assets);
+    setPhotos(photoArr);
+  };
+
   const renderItem = ({ item: photo }) => (
     <ImageContainer onPress={() => choosePhoto(photo.uri)}>
       <Image
         source={{ uri: photo.uri }}
-        style={{ width: width / numColujmns, height: 100 }}
+        style={{ width: width / numColumns, height: 100 }}
       />
       <IconContainer>
         <Ionicons
@@ -117,6 +138,7 @@ const SelectPhoto = ({ navigation }) => {
 
   return (
     <Container>
+      <StatusBar hidden={false} />
       <Top>
         {chosenPhoto !== "" ? (
           <Image
@@ -128,9 +150,11 @@ const SelectPhoto = ({ navigation }) => {
       <Bottom>
         <FlatList
           data={photos}
-          numColumns={numColujmns}
+          numColumns={numColumns}
           keyExtractor={(photo) => "" + photo.id}
           renderItem={renderItem}
+          onEndReachedThreshold={0.02}
+          onEndReached={fetchMore}
         />
       </Bottom>
     </Container>
