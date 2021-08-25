@@ -31,7 +31,7 @@ const Rooms = () => {
               height: 1,
               backgroundColor: "rgba(0,0,0,0.2)",
             }}
-          ></View>
+          />
         )}
         style={{ width: "100%" }}
         data={data?.seeRooms}

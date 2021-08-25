@@ -54,6 +54,7 @@ export const ROOM_FRAGMENT = gql`
     id
     unreadTotal
     users {
+      id
       avatar
       username
     }
