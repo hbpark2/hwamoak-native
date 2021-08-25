@@ -4,6 +4,8 @@ import TabsNav from "./TabsNav";
 import UploadNav from "./UploadNav";
 import UploadForm from "../screens/UploadForm";
 import { Ionicons } from "@expo/vector-icons";
+import MessagesNav from "./MessagesNav";
+
 const Stack = createStackNavigator();
 
 const LoggedInNav = () => {
@@ -34,6 +36,11 @@ const LoggedInNav = () => {
           },
         }}
         component={UploadForm}
+      />
+      <Stack.Screen
+        name="Messages"
+        component={MessagesNav}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

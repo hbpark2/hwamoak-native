@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragments";
 import ScreenLayout from "../components/ScreenLayout";
-import { FlatList, ScrollView, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import Photo from "../components/Photo";
 import PlantFeed from "./PlantFeed";
 
@@ -47,6 +54,21 @@ export default ({ navigation }) => {
   };
 
   const [refreshing, setRefreshing] = useState(false);
+
+  const MessageButton = () => (
+    <TouchableOpacity
+      style={{ marginRight: 20 }}
+      onPress={() => navigation.navigate("Messages")}
+    >
+      <Ionicons name="paper-plane" color="#333" size={24} />
+    </TouchableOpacity>
+  );
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: MessageButton,
+    });
+  }, []);
 
   return (
     <ScreenLayout loading={loading}>

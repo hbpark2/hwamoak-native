@@ -40,12 +40,11 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-// uri: "http://localhost:4000/graphql",
 // uri: "https://hwamoak-backend.herokuapp.com/graphql",
+// uri: "http://localhost:4000/graphql",
 
-// uri: "https://dull-rabbit-45.loca.lt/graphql",
 const uploadHttpLink = createUploadLink({
-  uri: "https://hwamoak-backend.herokuapp.com/graphql",
+  uri: "https://terrible-wolverine-81.loca.lt/graphql",
 });
 
 const onErrorLink = onError(({ graphQLErrors, networkError }) => {
