@@ -15,7 +15,7 @@ const SEE_ROOMS_QUERY = gql`
 `;
 
 const Rooms = () => {
-  const { data, loading } = useQuery(SEE_ROOMS_QUERY);
+  const { data, loading, refetch } = useQuery(SEE_ROOMS_QUERY);
 
   const renderItem = ({ item: room }) => {
     return <RoomItem {...room} />;

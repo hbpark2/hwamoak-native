@@ -51,7 +51,6 @@ export default ({ navigation, route }) => {
   }, []);
 
   const renderPhoto = ({ item: photo }) => {
-    // console.log(photo);
     return (
       <Photo
         id={photo.id}
@@ -70,8 +69,8 @@ export default ({ navigation, route }) => {
 
   return (
     <Container>
-      <ProfileHeader {...data?.seeProfile} />
       <FlatList
+        ListHeaderComponent={() => <ProfileHeader {...data?.seeProfile} />}
         showsVerticalScrollIndicator={false}
         style={{ width: "100%" }}
         data={data?.seeProfile?.photos}

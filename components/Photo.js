@@ -120,6 +120,7 @@ function Photo({ id, user, caption, file, isLiked, likes, fullView }) {
         <UserAvatar resizeMode="cover" source={{ uri: user?.avatar }} />
         <Username>{user?.username}</Username>
       </Header>
+
       <File
         resizeMode="cover"
         style={{

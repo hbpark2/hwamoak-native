@@ -1,8 +1,10 @@
+import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
 import styled from "styled-components/native";
 import useMe from "../../hook/useMe";
 import { Styles } from "../../Styles";
+import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
+
 const RoomContainer = styled.TouchableOpacity`
   /* background-color: ${(props) => props.theme.background}; */
   width: 100%;
@@ -47,6 +49,36 @@ const UnreadText = styled.Text`
   font-weight: 500;
 `;
 
+const ROOM_QUERY = gql`
+  query seeRoom($id: Int!) {
+    seeRoom(id: $id) {
+      id
+      messages {
+        id
+        payload
+        user {
+          username
+          avatar
+        }
+        read
+      }
+    }
+  }
+`;
+const ROOM_UPDATES = gql`
+  subscription roomUpdates($id: Int!) {
+    roomUpdates(id: $id) {
+      id
+      payload
+      user {
+        username
+        avatar
+      }
+      read
+    }
+  }
+`;
+
 const RoomItem = ({ users, unreadTotal, id }) => {
   const { data: meData } = useMe();
   const navigation = useNavigation();
@@ -54,11 +86,74 @@ const RoomItem = ({ users, unreadTotal, id }) => {
     (user) => user.username !== meData?.me?.username
   );
 
-  const goToRoom = () =>
+  const { data, loading, subscribeToMore } = useQuery(ROOM_QUERY, {
+    variables: {
+      id: id,
+    },
+  });
+
+  const goToRoom = () => {
     navigation.navigate("Room", {
       id,
       talkingTo,
     });
+  };
+  const client = useApolloClient();
+
+  const updateQuery = (prevQuery, options) => {
+    const {
+      subscriptionData: {
+        data: { roomUpdates: message },
+      },
+    } = options;
+
+    if (message.id) {
+      const messageFragment = client.cache.writeFragment({
+        fragment: gql`
+          fragment NewMessage on Message {
+            id
+            payload
+            user {
+              username
+              avatar
+            }
+            read
+          }
+        `,
+        data: message,
+      });
+
+      client.cache.modify({
+        id: `Room:${id}`,
+        fields: {
+          messages(prev) {
+            const existingMessage = prev.find(
+              (aMessage) => aMessage.__ref === messageFragment.__ref
+            );
+            if (existingMessage) {
+              return prev;
+            }
+            return [...prev, messageFragment];
+          },
+          unreadTotal(prev) {
+            return;
+          },
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      subscribeToMore({
+        document: ROOM_UPDATES,
+        variables: {
+          id,
+        },
+        updateQuery,
+      });
+    }
+  }, [data]);
 
   return (
     <RoomContainer onPress={goToRoom}>
@@ -68,7 +163,7 @@ const RoomItem = ({ users, unreadTotal, id }) => {
           <Username>{talkingTo.username}</Username>
           <UnreadText>
             {unreadTotal} unread
-            {unreadTotal === 1 ? "message" : "messages"}
+            {unreadTotal === 1 ? " message" : " messages"}
           </UnreadText>
         </Data>
       </Column>

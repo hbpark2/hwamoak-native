@@ -45,7 +45,6 @@ export default ({ navigation }) => {
   });
 
   const renderPhoto = ({ item: photo }) => {
-    // console.log(photo);
     return (
       <Photo
         id={photo.id}
@@ -63,7 +62,6 @@ export default ({ navigation }) => {
   };
 
   useEffect(() => {
-    console.log(userData);
     navigation.setOptions({
       title: userData?.me?.username,
     });
@@ -71,8 +69,8 @@ export default ({ navigation }) => {
 
   return (
     <Container>
-      <ProfileHeader {...data?.seeProfile} />
       <FlatList
+        ListHeaderComponent={() => <ProfileHeader {...data?.seeProfile} />}
         showsVerticalScrollIndicator={false}
         style={{ width: "100%" }}
         data={data?.seeProfile?.photos}

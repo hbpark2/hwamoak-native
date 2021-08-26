@@ -6,6 +6,7 @@ import styled from "styled-components/native";
 import ScreenLayout from "../components/ScreenLayout";
 import useMe from "../hook/useMe";
 import { Ionicons } from "@expo/vector-icons";
+import { ROOM_FRAGMENT } from "../fragments";
 
 const MessageContainer = styled.View`
   padding: 0 10px;
@@ -56,6 +57,15 @@ const InputContainer = styled.View`
 `;
 
 const SendButton = styled.TouchableOpacity``;
+
+const SEE_ROOMS_QUERY = gql`
+  query seeRooms {
+    seeRooms {
+      ...RoomParts
+    }
+  }
+  ${ROOM_FRAGMENT}
+`;
 
 const ROOM_UPDATES = gql`
   subscription roomUpdates($id: Int!) {
@@ -158,6 +168,25 @@ const Room = ({ route, navigation }) => {
     }
   };
 
+  const updateRoomsQuery = (cache, result) => {
+    const {
+      data: {
+        readMessage: { ok },
+      },
+    } = result;
+
+    if (ok) {
+      cache.modify({
+        id: `Room:${route.params.id}`,
+        fields: {
+          unreadTotal(prev) {
+            return 0;
+          },
+        },
+      });
+    }
+  };
+
   const [sendMessageMutation, { loading: sendingMessage }] = useMutation(
     SEND_MESSAGE_MUTATION,
     {
@@ -166,22 +195,19 @@ const Room = ({ route, navigation }) => {
   );
 
   const [readMessageMutation, { loading: readLoading }] = useMutation(
-    READ_MESSAGE_MUTATION
+    READ_MESSAGE_MUTATION,
+    {
+      update: updateRoomsQuery,
+    }
   );
-
-  // const readMessage = () => {
-  //   readMessageMutation({
-  //     variables: {
-  //       id: route?.params?.id,
-  //     },
-  //   });
-  // };
 
   const { data, loading, subscribeToMore } = useQuery(ROOM_QUERY, {
     variables: {
       id: route?.params?.id,
     },
   });
+
+  const { data: roomsData, loading: roomsLoading } = useQuery(SEE_ROOMS_QUERY);
 
   const onValid = ({ message }) => {
     if (!sendingMessage) {
@@ -203,7 +229,6 @@ const Room = ({ route, navigation }) => {
       },
     } = options;
 
-    console.log(options);
     if (message.id) {
       const messageFragment = client.cache.writeFragment({
         fragment: gql`
