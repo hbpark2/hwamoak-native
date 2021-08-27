@@ -98,6 +98,7 @@ const RoomItem = ({ users, unreadTotal, id }) => {
       talkingTo,
     });
   };
+
   const client = useApolloClient();
 
   const updateQuery = (prevQuery, options) => {

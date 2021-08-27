@@ -58,15 +58,6 @@ const InputContainer = styled.View`
 
 const SendButton = styled.TouchableOpacity``;
 
-const SEE_ROOMS_QUERY = gql`
-  query seeRooms {
-    seeRooms {
-      ...RoomParts
-    }
-  }
-  ${ROOM_FRAGMENT}
-`;
-
 const ROOM_UPDATES = gql`
   subscription roomUpdates($id: Int!) {
     roomUpdates(id: $id) {
@@ -100,8 +91,8 @@ const READ_MESSAGE_MUTATION = gql`
 `;
 
 const ROOM_QUERY = gql`
-  query seeRoom($id: Int!) {
-    seeRoom(id: $id) {
+  query seeRoom($id: Int, $userId: Int) {
+    seeRoom(id: $id, userId: $userId) {
       id
       messages {
         id
@@ -118,7 +109,6 @@ const ROOM_QUERY = gql`
 
 const Room = ({ route, navigation }) => {
   const { data: meData } = useMe();
-
   const { register, setValue, handleSubmit, getValues, watch } = useForm();
 
   const updateSendMessage = (cache, result) => {
@@ -158,7 +148,7 @@ const Room = ({ route, navigation }) => {
       });
 
       cache.modify({
-        id: `Room:${route.params.id}`,
+        id: `Room:${route.params.id ? route.params.id : data?.seeRoom?.id}`,
         fields: {
           messages(prev) {
             return [...prev, messageFragment];
@@ -177,7 +167,7 @@ const Room = ({ route, navigation }) => {
 
     if (ok) {
       cache.modify({
-        id: `Room:${route.params.id}`,
+        id: `Room:${route.params.id ? route.params.id : data?.seeRoom?.id}`,
         fields: {
           unreadTotal(prev) {
             return 0;
@@ -202,20 +192,28 @@ const Room = ({ route, navigation }) => {
   );
 
   const { data, loading, subscribeToMore } = useQuery(ROOM_QUERY, {
-    variables: {
-      id: route?.params?.id,
-    },
+    variables: route?.params?.id
+      ? {
+          id: route?.params?.id,
+        }
+      : {
+          userId: route?.params?.talkingTo?.id,
+        },
   });
 
-  const { data: roomsData, loading: roomsLoading } = useQuery(SEE_ROOMS_QUERY);
-
+  //SEND MESSAGE
   const onValid = ({ message }) => {
     if (!sendingMessage) {
       sendMessageMutation({
-        variables: {
-          payload: message,
-          roomId: route?.params?.id,
-        },
+        variables: route?.params?.id
+          ? {
+              payload: message,
+              roomId: route?.params?.id,
+            }
+          : {
+              payload: message,
+              roomId: data?.seeRoom?.id,
+            },
       });
     }
   };
@@ -246,7 +244,7 @@ const Room = ({ route, navigation }) => {
       });
 
       client.cache.modify({
-        id: `Room:${route.params.id}`,
+        id: `Room:${route.params.id ? route.params.id : data?.seeRoom?.id}`,
         fields: {
           messages(prev) {
             const existingMessage = prev.find(
@@ -283,9 +281,13 @@ const Room = ({ route, navigation }) => {
     if (data?.seeRoom) {
       subscribeToMore({
         document: ROOM_UPDATES,
-        variables: {
-          id: route?.params?.id,
-        },
+        variables: route?.params?.id
+          ? {
+              id: route?.params?.id,
+            }
+          : {
+              id: data?.seeRoom?.id,
+            },
         updateQuery,
       });
     }

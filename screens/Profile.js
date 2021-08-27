@@ -1,7 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect } from "react";
-import { FlatList, Text, View } from "react-native";
-import { isLoggedInVar, tokenVar } from "../apollo";
+import { FlatList } from "react-native";
 import styled from "styled-components/native";
 import { gql, useQuery } from "@apollo/client";
 import { PHOTO_FRAGMENT } from "../fragments";
@@ -15,9 +13,19 @@ const Container = styled.View`
   background-color: ${(props) => props.theme.background};
 `;
 
+const FIND_ROOM_QUERY = gql`
+  query findRoom($talkingToId: Int) {
+    findRoom(talkingToId: $talkingToId) {
+      ok
+      id
+    }
+  }
+`;
+
 const SEE_PROFILE_QUERY = gql`
   query seeProfile($username: String!) {
     seeProfile(username: $username) {
+      id
       firstName
       lastName
       username
@@ -39,6 +47,12 @@ export default ({ navigation, route }) => {
   const { data, loading } = useQuery(SEE_PROFILE_QUERY, {
     variables: {
       username: route?.params?.username,
+    },
+  });
+
+  const { data: roomData, loading: roomLoading } = useQuery(FIND_ROOM_QUERY, {
+    variables: {
+      talkingToId: route?.params?.id,
     },
   });
 
@@ -70,7 +84,12 @@ export default ({ navigation, route }) => {
   return (
     <Container>
       <FlatList
-        ListHeaderComponent={() => <ProfileHeader {...data?.seeProfile} />}
+        ListHeaderComponent={() => (
+          <ProfileHeader
+            {...data?.seeProfile}
+            roomId={roomData?.findRoom?.id || null}
+          />
+        )}
         showsVerticalScrollIndicator={false}
         style={{ width: "100%" }}
         data={data?.seeProfile?.photos}
