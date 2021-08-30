@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import useMe from "../../hook/useMe";
 import { Styles } from "../../Styles";
 import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+import { Animated, Text, TouchableOpacity, View } from "react-native";
 
 const RoomContainer = styled.TouchableOpacity`
   /* background-color: ${(props) => props.theme.background}; */
@@ -49,6 +51,8 @@ const UnreadText = styled.Text`
   font-weight: 500;
 `;
 
+const ExtraContainer = styled.View``;
+
 const ROOM_QUERY = gql`
   query seeRoom($id: Int!) {
     seeRoom(id: $id) {
@@ -85,6 +89,64 @@ const RoomItem = ({ users, unreadTotal, id }) => {
   const talkingTo = users.find(
     (user) => user.username !== meData?.me?.username
   );
+
+  const RightActions = (progress, dragX) => {
+    const scale = dragX.interpolate({
+      inputRange: [-100, 0],
+      outputRange: [0.7, 0],
+    });
+    const opacity = dragX.interpolate({
+      inputRange: [-0.5, 0],
+      outputRange: [0.5, 0],
+    });
+
+    return (
+      <>
+        <TouchableOpacity onPress={() => alert("Delete button pressed")}>
+          <Animated.View
+            style={{
+              flex: 1,
+              backgroundColor: "#c23a25",
+              justifyContent: "center",
+              opacity: opacity,
+            }}
+          >
+            <Animated.Text
+              style={{
+                color: "white",
+                paddingHorizontal: 10,
+                fontWeight: "600",
+                transform: [{ scale: scale }],
+              }}
+            >
+              Delete
+            </Animated.Text>
+          </Animated.View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => alert("Archive button pressed")}>
+          <Animated.View
+            style={{
+              flex: 1,
+              backgroundColor: "#f6f5e8",
+              justifyContent: "center",
+              opacity: opacity,
+            }}
+          >
+            <Animated.Text
+              style={{
+                color: "#333",
+                paddingHorizontal: 10,
+                fontWeight: "600",
+                transform: [{ scale: scale }],
+              }}
+            >
+              Archive
+            </Animated.Text>
+          </Animated.View>
+        </TouchableOpacity>
+      </>
+    );
+  };
 
   const { data, loading, subscribeToMore } = useQuery(ROOM_QUERY, {
     variables: {
@@ -157,19 +219,21 @@ const RoomItem = ({ users, unreadTotal, id }) => {
   }, [data]);
 
   return (
-    <RoomContainer onPress={goToRoom}>
-      <Column>
-        <Avatar source={{ uri: talkingTo.avatar }} />
-        <Data>
-          <Username>{talkingTo.username}</Username>
-          <UnreadText>
-            {unreadTotal} unread
-            {unreadTotal === 1 ? " message" : " messages"}
-          </UnreadText>
-        </Data>
-      </Column>
-      <Column>{unreadTotal !== 0 ? <UnreadDot /> : null}</Column>
-    </RoomContainer>
+    <Swipeable renderRightActions={RightActions}>
+      <RoomContainer onPress={goToRoom}>
+        <Column>
+          <Avatar source={{ uri: talkingTo.avatar }} />
+          <Data>
+            <Username>{talkingTo.username}</Username>
+            <UnreadText>
+              {unreadTotal} unread
+              {unreadTotal === 1 ? " message" : " messages"}
+            </UnreadText>
+          </Data>
+        </Column>
+        <Column>{unreadTotal !== 0 ? <UnreadDot /> : null}</Column>
+      </RoomContainer>
+    </Swipeable>
   );
 };
 
