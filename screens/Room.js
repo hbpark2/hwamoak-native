@@ -268,7 +268,7 @@ const Room = ({ route, navigation }) => {
 
   useEffect(() => {
     const toReadMessage = data?.seeRoom?.messages?.filter(
-      (item) => item.user.username === route?.params?.talkingTo.username
+      (item) => item.user.username === route?.params?.talkingTo?.username
     );
     const makeReadMessage = toReadMessage?.filter((item) => !item.read);
 

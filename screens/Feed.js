@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragments";
 import ScreenLayout from "../components/ScreenLayout";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { TouchableOpacity, FlatList } from "react-native";
 import Photo from "../components/Photo";
 import PlantFeed from "./PlantFeed";
 
@@ -74,7 +67,7 @@ export default ({ navigation }) => {
     <ScreenLayout loading={loading}>
       <FlatList
         ListHeaderComponent={() => <PlantFeed navigation={navigation} />}
-        onEndReachedThreshold={0.02}
+        onEndReachedThreshold={0.05}
         onEndReached={() =>
           fetchMore({
             variables: {

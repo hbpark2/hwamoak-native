@@ -7,7 +7,6 @@ const Button = styled.TouchableOpacity`
   background-color: ${(props) => props.theme.blue};
   padding: 15px 10px;
   border-radius: 5px;
-  /* margin-top: 20px; */
   width: 100%;
   opacity: ${(props) => (props.disabled ? "0.5" : "1")};
 `;

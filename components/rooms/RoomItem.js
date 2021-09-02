@@ -87,7 +87,7 @@ const RoomItem = ({ users, unreadTotal, id }) => {
   const { data: meData } = useMe();
   const navigation = useNavigation();
   const talkingTo = users.find(
-    (user) => user.username !== meData?.me?.username
+    (user) => user?.username !== meData?.me?.username
   );
 
   const RightActions = (progress, dragX) => {
@@ -222,9 +222,9 @@ const RoomItem = ({ users, unreadTotal, id }) => {
     <Swipeable renderRightActions={RightActions}>
       <RoomContainer onPress={goToRoom}>
         <Column>
-          <Avatar source={{ uri: talkingTo.avatar }} />
+          <Avatar source={{ uri: talkingTo?.avatar }} />
           <Data>
-            <Username>{talkingTo.username}</Username>
+            <Username>{talkingTo?.username}</Username>
             <UnreadText>
               {unreadTotal} unread
               {unreadTotal === 1 ? " message" : " messages"}

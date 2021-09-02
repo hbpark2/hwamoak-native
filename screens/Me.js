@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { isLoggedInVar, tokenVar } from "../apollo";
 import styled from "styled-components/native";
@@ -38,11 +38,19 @@ const SEE_PROFILE_QUERY = gql`
 
 export default ({ navigation }) => {
   const { data: userData } = useMe();
-  const { data, loading } = useQuery(SEE_PROFILE_QUERY, {
+  const { data, loading, refetch } = useQuery(SEE_PROFILE_QUERY, {
     variables: {
       username: userData?.me?.username,
     },
   });
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const refresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   const renderPhoto = ({ item: photo }) => {
     return (
@@ -70,6 +78,8 @@ export default ({ navigation }) => {
   return (
     <Container>
       <FlatList
+        refreshing={refreshing}
+        onRefresh={refresh}
         ListHeaderComponent={() => <ProfileHeader {...data?.seeProfile} />}
         showsVerticalScrollIndicator={false}
         style={{ width: "100%" }}

@@ -1,17 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { Ionicons } from "@expo/vector-icons";
-
-import { gql, useQuery } from "@apollo/client";
-import {
-  FlatList,
-  Image,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-} from "react-native";
-import Plant from "../components/Plant";
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/client";
+import { FlatList } from "react-native";
 import PlantInPlantsFeed from "../components/PlantInPlantsFeed";
+import ScreenLayout from "../components/ScreenLayout";
+import { COMMENT_FRAGMENT, PHOTO_FRAGMENT, PLANT_FRAGMENT } from "../fragments";
 
 const Container = styled.View`
   flex: 1;
@@ -33,77 +27,57 @@ const LinkText = styled.Text`
 `;
 
 const PLANTS_FEED_QUERY = gql`
-  query seeWholePlantsFeed($lastId: Int) {
-    seeWholePlantsFeed(lastId: $lastId) {
-      id
-      title
-      caption
-      water
-      sunlight
-      temperatureMin
-      temperatureMax
-      plantDivision
-      plantClass
-      plantOrder
-      plantFamily
-      plantGenus
-      plantSpecies
-      plantHome
-      plantHabitat
-      plantLikes
-      isLiked
+  query seeWholePlantsFeed($offset: Int!) {
+    seeWholePlantsFeed(offset: $offset) {
+      ...PlantFragment
       user {
         username
         avatar
       }
-      images {
-        file
-      }
     }
   }
+  ${PLANT_FRAGMENT}
 `;
 
-const WholePlantsFeed = ({ navigation }) => {
-  const { width } = useWindowDimensions();
-  const {
-    data: plantsData,
-    loading,
-    refetch,
-  } = useQuery(PLANTS_FEED_QUERY, {
-    // skip: 0,
+export default ({ navigation }) => {
+  const { data, loading, refetch, fetchMore } = useQuery(PLANTS_FEED_QUERY, {
     variables: {
-      lastId: 0,
+      offset: 0,
     },
   });
 
-  const renderPhoto = ({ item: plant }) => {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const renderItem = ({ item: plant }) => {
     return <PlantInPlantsFeed {...plant} />;
   };
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
-        <Image
-          style={{ maxHeight: 35 }}
-          resizeMode="contain"
-          source={require("../assets/logo.png")}
-        />
-      ),
-    });
-  }, []);
+  const refresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   return (
-    <Container width={width}>
+    <ScreenLayout loading={loading}>
       <FlatList
-        showsVerticalScrollIndicator={false}
         numColumns={2}
+        data={data?.seeWholePlantsFeed || []}
+        onEndReachedThreshold={0.05}
+        onEndReached={() =>
+          fetchMore({
+            variables: {
+              offset: data?.seeWholePlantsFeed?.length,
+            },
+          })
+        }
+        showsVerticalScrollIndicator={false}
         style={{ width: "100%", display: "flex" }}
-        data={plantsData?.seeWholePlantsFeed}
         keyExtractor={(plant) => "" + plant.id}
-        renderItem={renderPhoto}
+        renderItem={renderItem}
+        refreshing={refreshing}
+        onRefresh={refresh}
       />
-    </Container>
+    </ScreenLayout>
   );
 };
-
-export default WholePlantsFeed;

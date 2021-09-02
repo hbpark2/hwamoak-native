@@ -4,7 +4,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Alert } from "react-native";
 import { logUserIn } from "../apollo";
 import AuthButton from "../components/auth/AuthButton";
 import AuthLayout from "../components/auth/AuthLayout";
@@ -33,7 +33,6 @@ export default function Login({ route: { params } }) {
     const {
       login: { ok, token },
     } = data;
-
     if (ok) {
       await logUserIn(token);
     }

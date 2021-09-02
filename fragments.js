@@ -60,3 +60,28 @@ export const ROOM_FRAGMENT = gql`
     }
   }
 `;
+
+export const PLANT_FRAGMENT = gql`
+  fragment PlantFragment on Plants {
+    id
+    title
+    caption
+    water
+    sunlight
+    temperatureMin
+    temperatureMax
+    plantDivision
+    plantClass
+    plantOrder
+    plantFamily
+    plantGenus
+    plantSpecies
+    plantHome
+    plantHabitat
+    plantLikes
+    isLiked
+    images {
+      file
+    }
+  }
+`;

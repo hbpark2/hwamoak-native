@@ -24,7 +24,7 @@ const Container = styled.TouchableOpacity`
   border-radius: 4px;
 `;
 
-const Header = styled.TouchableOpacity`
+const Header = styled.View`
   flex-direction: row;
   align-items: center;
 `;
@@ -56,7 +56,7 @@ const Likes = styled.Text`
 
 const ExtraContainer = styled.View``;
 
-function Plant({
+const PlantInPlantsFeed = ({
   id,
   user,
   title,
@@ -65,7 +65,8 @@ function Plant({
   isLiked,
   plantLikes,
   fullView,
-}) {
+}) => {
+  // console.log(id);
   const navigation = useNavigation();
 
   const updateToggleLike = (cache, result) => {
@@ -113,7 +114,10 @@ function Plant({
       <Header>
         <TitleText>{title}</TitleText>
       </Header>
-      <File resizeMode="cover" source={{ uri: images[0]?.file }} />
+      <File
+        resizeMode="cover"
+        source={{ uri: images ? images[0]?.file : null }}
+      />
       <ExtraContainer>
         <Actions>
           <Action onPress={togglePlantLikeMutation}>
@@ -128,7 +132,7 @@ function Plant({
       </ExtraContainer>
     </Container>
   );
-}
+};
 
 // Photo.propTypes = {
 //   id: PropTypes.number.isRequired,
@@ -143,4 +147,4 @@ function Plant({
 //   commentNumber: PropTypes.number,
 // };
 
-export default Plant;
+export default PlantInPlantsFeed;

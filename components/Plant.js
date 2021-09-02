@@ -64,6 +64,7 @@ function Plant({
   isLiked,
   plantLikes,
   fullView,
+  searchScreen,
 }) {
   const navigation = useNavigation();
 
@@ -108,7 +109,7 @@ function Plant({
   };
 
   return (
-    <Container onPress={goToPlant}>
+    <Container onPress={goToPlant} searchScreen={searchScreen}>
       <Header>
         <TitleText>{title}</TitleText>
       </Header>

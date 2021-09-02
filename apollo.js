@@ -45,10 +45,8 @@ const authLink = setContext((_, { headers }) => {
 });
 
 // uri: "https://hwamoak-backend.herokuapp.com/graphql",
-// uri: "https://wet-duck-58.loca.lt/graphql",
 // uri: "http://localhost:4000/graphql",
 
-// uri: "https://wet-duck-58.loca.lt/graphql",
 const uploadHttpLink = createUploadLink({
   uri: "http://localhost:4000/graphql",
 });
@@ -77,6 +75,7 @@ export const cache = new InMemoryCache({
     Query: {
       fields: {
         seeFeed: offsetLimitPagination(),
+        seeWholePlantsFeed: offsetLimitPagination(),
       },
     },
   },

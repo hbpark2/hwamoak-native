@@ -19,7 +19,7 @@ const LinkBox = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
   padding: 15px 15px 0;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-end;
 `;
 const LinkText = styled.Text`
@@ -52,7 +52,7 @@ const PLANTS_FEED_QUERY = gql`
   }
 `;
 
-const PlantFeed = ({ navigation }) => {
+const PlantFeed = ({ navigation, searchScreen }) => {
   const { width } = useWindowDimensions();
   const { data: plantsData, refetch } = useQuery(PLANTS_FEED_QUERY, {
     skip: 0,
@@ -66,20 +66,21 @@ const PlantFeed = ({ navigation }) => {
   // console.log(navigation);
 
   return (
-    <Container width={width}>
+    <Container width={width} searchScreen={searchScreen}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        horizontal={true}
+        horizontal={!searchScreen && true}
         style={{ width: "100%", display: "flex" }}
         data={plantsData?.seePlantsFeed}
         keyExtractor={(plant) => "" + plant.id}
         renderItem={renderPhoto}
       />
-
-      <LinkBox onPress={() => navigation.navigate("WholePlantsFeed")}>
-        <Ionicons name="arrow-forward" size={16} />
-        <LinkText>go to plants feed</LinkText>
-      </LinkBox>
+      {!searchScreen && (
+        <LinkBox onPress={() => navigation.navigate("WholePlantsFeed")}>
+          <Ionicons name="arrow-forward" size={16} />
+          <LinkText>go to plants feed</LinkText>
+        </LinkBox>
+      )}
     </Container>
   );
 };

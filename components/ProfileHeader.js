@@ -173,9 +173,10 @@ export default ProfileHeader = ({
     });
 
     cache.modify({
-      id: `User:${meData.username}`,
+      id: `User:${meData?.me?.id}`,
       fields: {
         totalFollowing(prev) {
+          console.log(prev);
           return prev + 1;
         },
       },
@@ -204,7 +205,7 @@ export default ProfileHeader = ({
     });
 
     cache.modify({
-      id: `User:${meData.username}`,
+      id: `User:${meData?.me?.id}`,
       fields: {
         totalFollowing(prev) {
           return prev - 1;
