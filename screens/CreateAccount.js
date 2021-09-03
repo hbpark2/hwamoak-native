@@ -2,7 +2,13 @@ import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  View,
+} from "react-native";
 import AuthButton from "../components/auth/AuthButton";
 import AuthLayout from "../components/auth/AuthLayout";
 import { TextInput } from "../components/auth/AuthShare";
@@ -34,18 +40,21 @@ export default function CreateAccount({ navigation }) {
     const {
       createAccount: { ok },
     } = data;
-    const { username, password } = getValues();
+    const { email, password } = getValues();
     if (ok) {
+      alert("회원가입이 완료되었습니다 :)");
       navigation.navigate("LogIn", {
-        username,
+        email,
         password,
       });
     }
   };
+
   const [CreateAccountMutation, { loading }] = useMutation(
     CREATE_ACCOUNT_MUTATION,
     { onCompleted }
   );
+
   const lastNameRef = useRef();
   const usernameRef = useRef();
   const emailRef = useRef();

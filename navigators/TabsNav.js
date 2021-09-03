@@ -9,8 +9,7 @@ const Tabs = createBottomTabNavigator();
 
 const TabsNav = () => {
   const { data, loading } = useMe();
-  // console.log(`loading: ${loading}`);
-  // console.log(`data : ${data?.me}`);
+
   return (
     <Tabs.Navigator
       tabBarOptions={{

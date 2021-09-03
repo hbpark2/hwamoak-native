@@ -4,15 +4,14 @@ import React from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
-import { Text, View, TouchableOpacity, Alert } from "react-native";
 import { logUserIn } from "../apollo";
 import AuthButton from "../components/auth/AuthButton";
 import AuthLayout from "../components/auth/AuthLayout";
 import { TextInput } from "../components/auth/AuthShare";
 
 const LOGIN_MUTATION = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       ok
       token
       error
@@ -23,7 +22,7 @@ const LOGIN_MUTATION = gql`
 export default function Login({ route: { params } }) {
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
-      username: params?.username,
+      email: params?.email,
       password: params?.password,
     },
   });
@@ -55,7 +54,7 @@ export default function Login({ route: { params } }) {
   };
 
   useEffect(() => {
-    register("username", {
+    register("email", {
       required: true,
     });
     register("password", {
@@ -66,12 +65,12 @@ export default function Login({ route: { params } }) {
   return (
     <AuthLayout>
       <TextInput
-        value={watch("username")}
-        placeholder="User Name"
+        value={watch("email")}
+        placeholder="Email"
         returnKeyType="next"
         autoCapitalize="none"
         placeholderTextColor="gray"
-        onChangeText={(text) => setValue("username", text)}
+        onChangeText={(text) => setValue("email", text)}
         onSubmitEditing={() => onNext(passwordRef)}
       />
 
@@ -89,7 +88,7 @@ export default function Login({ route: { params } }) {
       <AuthButton
         text="Log In"
         loading={loading}
-        disabled={!watch("username") || !watch("password")}
+        disabled={!watch("email") || !watch("password")}
         onPress={handleSubmit(onValid)}
       />
 
