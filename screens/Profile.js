@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { FlatList } from "react-native";
 import styled from "styled-components/native";
 import { gql, useQuery } from "@apollo/client";
-import { PHOTO_FRAGMENT } from "../fragments";
+import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragments";
 import ProfileHeader from "../components/ProfileHeader";
 import Photo from "../components/Photo";
 
@@ -33,6 +33,9 @@ const SEE_PROFILE_QUERY = gql`
       avatar
       photos {
         ...PhotoFragment
+        comments {
+          ...CommentFragment
+        }
       }
       totalFollowing
       totalFollowers
@@ -41,6 +44,7 @@ const SEE_PROFILE_QUERY = gql`
     }
   }
   ${PHOTO_FRAGMENT}
+  ${COMMENT_FRAGMENT}
 `;
 
 export default ({ navigation, route }) => {
@@ -76,6 +80,7 @@ export default ({ navigation, route }) => {
         file={photo.file}
         isLiked={photo.isLiked}
         likes={photo.likes}
+        comments={photo.comments}
         commentNumber={photo.commentNumber}
       />
     );

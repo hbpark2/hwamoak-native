@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
-import { isLoggedInVar, tokenVar } from "../apollo";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { isLoggedInVar, logUserOut, tokenVar } from "../apollo";
 import styled from "styled-components/native";
 import useMe from "../hook/useMe";
 import ProfileHeader from "../components/ProfileHeader";
@@ -87,6 +87,9 @@ export default ({ navigation }) => {
         keyExtractor={(photo) => "" + photo.id}
         renderItem={renderPhoto}
       />
+      <TouchableOpacity onPress={() => logUserOut()}>
+        <Text>logout</Text>
+      </TouchableOpacity>
     </Container>
   );
 };

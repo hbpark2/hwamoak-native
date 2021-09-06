@@ -1,19 +1,11 @@
 import React from "react";
 import { RefreshControl, Text, TouchableOpacity, View } from "react-native";
-import styled from "styled-components/native";
 import { gql, useQuery } from "@apollo/client";
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragments";
 import { ScrollView } from "react-native-gesture-handler";
 import Photo from "../components/Photo";
 import ScreenLayout from "../components/ScreenLayout";
 import { useState } from "react";
-
-const Container = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  background-color: ${(props) => props.theme.background};
-`;
 
 const SEE_PHOTO = gql`
   query seePhoto($id: Int!) {

@@ -14,9 +14,6 @@ export default ScreenLayout = ({ loading, children }) => {
   return (
     <Container>
       {loading ? <ActivityIndicator color="#333" /> : children}
-      <TouchableOpacity onPress={() => logUserOut()}>
-        <Text>logout</Text>
-      </TouchableOpacity>
     </Container>
   );
 };

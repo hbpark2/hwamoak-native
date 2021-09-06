@@ -6,7 +6,6 @@ import styled from "styled-components/native";
 import ScreenLayout from "../components/ScreenLayout";
 import useMe from "../hook/useMe";
 import { Ionicons } from "@expo/vector-icons";
-import { ROOM_FRAGMENT } from "../fragments";
 
 const MessageContainer = styled.View`
   padding: 0 10px;
@@ -151,12 +150,6 @@ const Room = ({ route, navigation }) => {
         id: `Room:${route.params.id ? route.params.id : data?.seeRoom?.id}`,
         fields: {
           messages(prev) {
-            // const existingMessage = prev.find(
-            //   (aMessage) => aMessage.__ref === messageFragment.__ref
-            // );
-            // if (existingMessage) {
-            //   return prev;
-            // }
             return [...prev, messageFragment];
           },
         },
@@ -342,7 +335,7 @@ const Room = ({ route, navigation }) => {
         />
         <InputContainer>
           <TextInput
-            placeholder="Write a message ..."
+            placeholder="메시지 입력 ..."
             placeholderTextColor="rgba(0, 0, 0, 0.4)"
             returnKeyLabel="Send Message"
             returnKeyType="send"

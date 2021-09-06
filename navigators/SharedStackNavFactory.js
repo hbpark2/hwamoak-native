@@ -8,9 +8,10 @@ import Notifications from "../screens/Notifications";
 import Me from "../screens/Me";
 import { Image } from "react-native";
 import Likes from "../screens/Likes";
-import Comments from "../screens/Comments";
+
 import PlantScreen from "../screens/PlantScreen";
 import WholePlantsFeed from "../screens/WholePlantsFeed";
+import CommentScreen from "../screens/CommentScreen";
 
 const Stack = createStackNavigator();
 
@@ -66,7 +67,7 @@ export default function SharedStackNav({ screenName }) {
       <Stack.Screen name="Photo" component={Photo} />
       <Stack.Screen name="PlantScreen" component={PlantScreen} />
       <Stack.Screen name="Likes" component={Likes} />
-      <Stack.Screen name="Comments" component={Comments} />
+      <Stack.Screen name="Comments" component={CommentScreen} />
     </Stack.Navigator>
   );
 }

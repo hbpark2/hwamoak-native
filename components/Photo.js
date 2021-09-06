@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { Image, TouchableOpacity, useWindowDimensions } from "react-native";
+import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import Comments from "./Comments";
 
 const TOGGLE_LIKE_MUTATION = gql`
   mutation toggleLike($id: Int!) {
@@ -59,7 +60,17 @@ const ExtraContainer = styled.View`
   padding: 10px;
 `;
 
-function Photo({ id, user, caption, file, isLiked, likes, fullView }) {
+function Photo({
+  id,
+  user,
+  caption,
+  comments,
+  commentNumber,
+  file,
+  isLiked,
+  likes,
+  fullView,
+}) {
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
   const [imageHeight, setImageHeight] = useState(height - 350);
@@ -73,15 +84,12 @@ function Photo({ id, user, caption, file, isLiked, likes, fullView }) {
   // }, [file]);
 
   const updateToggleLike = (cache, result) => {
-    console.log(cache, result);
     const {
       data: {
         toggleLike: { ok },
       },
     } = result;
     if (ok) {
-      console.log("time to update the cache ");
-
       const photoId = `Photo:${id}`;
       cache.modify({
         id: photoId,
@@ -138,7 +146,13 @@ function Photo({ id, user, caption, file, isLiked, likes, fullView }) {
               size={18}
             />
           </Action>
-          <Action onPress={() => navigation.navigate("Comments")}>
+          <Action
+            onPress={() =>
+              navigation.navigate("Comments", {
+                photoId: id,
+              })
+            }
+          >
             <Ionicons name="chatbubble-outline" size={18} />
           </Action>
         </Actions>
@@ -157,6 +171,8 @@ function Photo({ id, user, caption, file, isLiked, likes, fullView }) {
           </TouchableOpacity>
           <CaptionText>{caption || ""}</CaptionText>
         </Caption>
+
+        <Comments id={id} commentNumber={commentNumber} />
       </ExtraContainer>
     </Container>
   );
