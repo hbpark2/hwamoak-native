@@ -25,7 +25,7 @@ const SEE_COMMENTS = gql`
   ${COMMENT_FRAGMENT}
 `;
 
-const Comments = ({ id, commentNumber }) => {
+const Comments = ({ id, comments, commentNumber }) => {
   const navigation = useNavigation();
   const { data, loading: commentLoading } = useQuery(SEE_COMMENTS, {
     variables: {
@@ -39,9 +39,8 @@ const Comments = ({ id, commentNumber }) => {
         <CommentCount>
           <CommentCountText
             onPress={() =>
-              navigation.navigate("Comments", {
+              navigation.navigate("CommentScreen", {
                 photoId: id,
-                comments: data?.seeComments,
               })
             }
           >

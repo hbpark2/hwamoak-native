@@ -46,9 +46,9 @@ export default function SharedStackNav({ screenName }) {
       {screenName === "Search" ? (
         <Stack.Screen name={"Search"} component={Search} />
       ) : null}
-      {screenName === "Notifications" ? (
+      {/* {screenName === "Notifications" ? (
         <Stack.Screen name={"Notifications"} component={Notifications} />
-      ) : null}
+      ) : null} */}
       {screenName === "Me" ? <Stack.Screen name={"Me"} component={Me} /> : null}
       <Stack.Screen
         name="WholePlantsFeed"
@@ -63,11 +63,24 @@ export default function SharedStackNav({ screenName }) {
           ),
         }}
       />
+      <Stack.Screen
+        name={"Notifications"}
+        component={Notifications}
+        options={{
+          headerTitle: () => (
+            <Image
+              style={{ maxHeight: 40 }}
+              resizeMode="contain"
+              source={require("../assets/logo.png")}
+            />
+          ),
+        }}
+      />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Photo" component={Photo} />
       <Stack.Screen name="PlantScreen" component={PlantScreen} />
       <Stack.Screen name="Likes" component={Likes} />
-      <Stack.Screen name="Comments" component={CommentScreen} />
+      <Stack.Screen name="CommentScreen" component={CommentScreen} />
     </Stack.Navigator>
   );
 }

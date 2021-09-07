@@ -1,7 +1,8 @@
 export const Styles = {
   background: "#fffef2",
   contentBg: "rgba(246, 245, 232, 1)",
-  conteBorder: " 1px solid rgb(219, 219, 219)",
+  conteBorder: "1px solid rgb(219, 219, 219)",
+  borderColor: "rgba(219, 219, 219,0.5)",
   blue: "#0095f6",
   deepGreen: "#204a23",
 };

@@ -245,11 +245,11 @@ export default function Search({ navigation }) {
     });
   }, []);
 
-  const renderItem = ({ item: photo }) => (
+  const renderItem = ({ item: plant }) => (
     <TouchableOpacity
       onPress={() =>
         navigation.navigate("PlantScreen", {
-          plantId: photo.id,
+          plantId: plant.id,
         })
       }
     >

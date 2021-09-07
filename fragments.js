@@ -85,3 +85,20 @@ export const PLANT_FRAGMENT = gql`
     }
   }
 `;
+
+export const NOTIFICATION_FRAGMENT = gql`
+  fragment NotificationFragment on Notification {
+    id
+    read
+    notificationType
+    sendUser {
+      avatar
+      username
+    }
+    photo {
+      id
+      file
+      caption
+    }
+  }
+`;

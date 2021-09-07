@@ -90,6 +90,7 @@ function Photo({
       },
     } = result;
     if (ok) {
+      console.log(cache);
       const photoId = `Photo:${id}`;
       cache.modify({
         id: photoId,
@@ -148,7 +149,7 @@ function Photo({
           </Action>
           <Action
             onPress={() =>
-              navigation.navigate("Comments", {
+              navigation.navigate("CommentScreen", {
                 photoId: id,
               })
             }
@@ -171,8 +172,9 @@ function Photo({
           </TouchableOpacity>
           <CaptionText>{caption || ""}</CaptionText>
         </Caption>
-
-        <Comments id={id} commentNumber={commentNumber} />
+        {comments && comments.length > 0 && (
+          <Comments id={id} comments={comments} commentNumber={commentNumber} />
+        )}
       </ExtraContainer>
     </Container>
   );

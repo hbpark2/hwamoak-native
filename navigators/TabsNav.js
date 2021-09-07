@@ -60,7 +60,7 @@ const TabsNav = () => {
           ),
         }}
       />
-
+      {/* 
       <Tabs.Screen
         name="Notifications"
         options={{
@@ -70,7 +70,7 @@ const TabsNav = () => {
         }}
       >
         {() => <StackNavFactory screenName="Notifications" />}
-      </Tabs.Screen>
+      </Tabs.Screen> */}
 
       <Tabs.Screen
         name="Me"

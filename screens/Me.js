@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 import useMe from "../hook/useMe";
 import ProfileHeader from "../components/ProfileHeader";
 import { gql, useQuery } from "@apollo/client";
-import { PHOTO_FRAGMENT } from "../fragments";
+import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragments";
 import Photo from "../components/Photo";
 
 const Container = styled.View`
@@ -26,6 +26,9 @@ const SEE_PROFILE_QUERY = gql`
       avatar
       photos {
         ...PhotoFragment
+        comments {
+          ...CommentFragment
+        }
       }
       totalFollowing
       totalFollowers
@@ -34,6 +37,7 @@ const SEE_PROFILE_QUERY = gql`
     }
   }
   ${PHOTO_FRAGMENT}
+  ${COMMENT_FRAGMENT}
 `;
 
 export default ({ navigation }) => {
@@ -61,6 +65,7 @@ export default ({ navigation }) => {
           avatar: data?.seeProfile?.avatar,
         }}
         caption={photo.caption}
+        comments={photo.comments}
         file={photo.file}
         isLiked={photo.isLiked}
         likes={photo.likes}

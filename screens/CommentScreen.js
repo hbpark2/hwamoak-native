@@ -58,6 +58,8 @@ export default ({ route }) => {
   const { data: userData } = useMe();
   const [refreshing, setRefreshing] = useState(false);
 
+  
+
   const {
     data,
     loading: commentLoading,
@@ -127,6 +129,11 @@ export default ({ route }) => {
       cache.modify({
         id: `Photo:${route?.params?.photoId}`,
         fields: {
+          // comments(prev) {
+          //   console.log("++++++++++++++++++++++++++");
+          //   console.log(prev);
+          //   return [...prev, commentFragment];
+          // },
           commentNumber(prev) {
             return prev + 1;
           },
@@ -156,6 +163,8 @@ export default ({ route }) => {
     register("payload");
   }, [register]);
 
+  //FIXME: 댓글달면 다른사진에서도 보임
+
   const renderItem = ({ item: comments }) => (
     <Comment {...comments} photoId={route?.params?.photoId} />
   );
@@ -169,7 +178,7 @@ export default ({ route }) => {
       <ScreenLayout loading={commentLoading}>
         <CommentContainer>
           <FlatList
-            data={data?.seeComments}
+            data={data?.seeComments || []}
             renderItem={renderItem}
             onEndReachedThreshold={0.05}
             onEndReached={() =>
