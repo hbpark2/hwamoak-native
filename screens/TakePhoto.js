@@ -104,10 +104,10 @@ export default function TakePhoto({ navigation }) {
   const goToUploadScreen = async (save) => {
     if (save) {
       //save
-      await MediaLibrary.saveToLibraryAsync(takenPhoto);
+      await MediaLibrary.saveToLibraryAsync(takenPhoto[0]);
     }
-    //go to upload
 
+    //go to upload
     navigation.navigate("UploadForm", {
       file: takenPhoto,
     });
@@ -140,7 +140,7 @@ export default function TakePhoto({ navigation }) {
 
       // const asset = await MediaLibrary.createAssetAsync(uri);
       // console.log(asset);
-      setTakenPhoto(uri);
+      setTakenPhoto([uri]);
     }
   };
 
@@ -171,7 +171,7 @@ export default function TakePhoto({ navigation }) {
           </CloseButton>
         </Camera>
       ) : (
-        <Image source={{ uri: takenPhoto }} style={{ flex: 1 }} />
+        <Image source={{ uri: takenPhoto[0] }} style={{ flex: 1 }} />
       )}
 
       {takenPhoto === "" ? (

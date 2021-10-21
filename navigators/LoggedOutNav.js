@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Welcome from "../screens/Welcome";
 import LogIn from "../screens/LogIn";
 import CreateAccount from "../screens/CreateAccount";
+import LoginContainer from "../components/KakaoLogin";
 
 const Stack = createStackNavigator();
 
@@ -22,7 +23,9 @@ export default function LoggedOutNav() {
         options={{ headerShown: false }}
         component={Welcome}
       />
-      <Stack.Screen name="LogIn" component={LogIn} />
+      {/* <Stack.Screen name="LogIn" component={LogIn} /> */}
+      <Stack.Screen name="LogIn" component={LoginContainer} />
+
       <Stack.Screen name="CreateAccount" component={CreateAccount} />
     </Stack.Navigator>
   );

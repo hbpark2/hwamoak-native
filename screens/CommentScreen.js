@@ -58,8 +58,6 @@ export default ({ route }) => {
   const { data: userData } = useMe();
   const [refreshing, setRefreshing] = useState(false);
 
-  
-
   const {
     data,
     loading: commentLoading,

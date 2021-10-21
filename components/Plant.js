@@ -17,7 +17,7 @@ const TOGGLE_PLANT_LIKE_MUTATION = gql`
 
 const Container = styled.TouchableOpacity`
   padding: 10px;
-  margin: 15px 10px 0;
+  margin: 15px 5px 0;
   background-color: rgb(246, 245, 232);
   border: 1px solid rgb(219, 219, 219);
   border-radius: 4px;
@@ -29,6 +29,7 @@ const Header = styled.TouchableOpacity`
 `;
 
 const TitleText = styled.Text`
+  width: 160px;
   font-weight: 600;
 `;
 

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { TouchableOpacity, useWindowDimensions } from "react-native";
+import { Text, TouchableOpacity, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Comments from "./Comments";
+import Swiper from "react-native-swiper";
 
 const TOGGLE_LIKE_MUTATION = gql`
   mutation toggleLike($id: Int!) {
@@ -66,7 +67,7 @@ function Photo({
   caption,
   comments,
   commentNumber,
-  file,
+  images,
   isLiked,
   likes,
   fullView,
@@ -75,6 +76,7 @@ function Photo({
   const { width, height } = useWindowDimensions();
   const [imageHeight, setImageHeight] = useState(height - 350);
 
+  // console.log(images);
   // useEffect(() => {
   //   if (file) {
   //     Image.getSize(file, (width, height) => {
@@ -129,15 +131,35 @@ function Photo({
         <UserAvatar resizeMode="cover" source={{ uri: user?.avatar }} />
         <Username>{user?.username}</Username>
       </Header>
-
+      {/* 
       <File
         resizeMode="cover"
         style={{
           width,
           height: imageHeight,
         }}
-        source={{ uri: file }}
-      />
+        source={{ uri: images[0]?.file }}
+      /> */}
+
+      <Swiper
+        style={{ height: imageHeight }}
+        showsButtons={false}
+        dotColor="rgba(255,255,255,0.5)"
+        activeDotColor="rgba(255,255,255,1)"
+      >
+        {images?.map((item, index) => (
+          <File
+            key={index}
+            resizeMode="cover"
+            style={{
+              width,
+              height: imageHeight,
+            }}
+            source={{ uri: item.file }}
+          />
+        ))}
+      </Swiper>
+
       <ExtraContainer>
         <Actions>
           <Action onPress={toggleLikeMutation}>

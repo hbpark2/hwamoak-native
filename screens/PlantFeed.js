@@ -67,14 +67,26 @@ const PlantFeed = ({ navigation, searchScreen }) => {
 
   return (
     <Container width={width} searchScreen={searchScreen}>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        horizontal={!searchScreen && true}
-        style={{ width: "100%", display: "flex" }}
-        data={plantsData?.seePlantsFeed}
-        keyExtractor={(plant) => "" + plant.id}
-        renderItem={renderPhoto}
-      />
+      {searchScreen ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          style={{ width: "100%" }}
+          contentContainerStyle={{ alignItems: "center", paddingBottom: 20 }}
+          numColumns={2}
+          data={plantsData?.seePlantsFeed}
+          keyExtractor={(plant) => "" + plant.id}
+          renderItem={renderPhoto}
+        />
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          horizontal={true}
+          style={{ width: "100%", display: "flex" }}
+          data={plantsData?.seePlantsFeed}
+          keyExtractor={(plant) => "" + plant.id}
+          renderItem={renderPhoto}
+        />
+      )}
       {!searchScreen && (
         <LinkBox onPress={() => navigation.navigate("WholePlantsFeed")}>
           <Ionicons name="arrow-forward" size={16} />

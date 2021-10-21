@@ -58,6 +58,7 @@ export default ({ navigation }) => {
       offset: 0,
     },
   });
+
   const { data: userData } = useMe();
 
   const notificationExist = userData?.me?.NotificationsReceived?.some(
@@ -98,6 +99,11 @@ export default ({ navigation }) => {
     navigation.setOptions({
       headerRight: MessageButton,
     });
+
+    return () =>
+      navigation.setOptions({
+        headerRight: MessageButton,
+      });
   }, [userData]);
 
   return (

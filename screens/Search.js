@@ -253,11 +253,7 @@ export default function Search({ navigation }) {
         })
       }
     >
-      <Plant {...photo} />
-      {/* <Image
-        source={{ uri: photo.images[0].file }}
-        style={{ width: width / numColumns, height: 100 }}
-      /> */}
+      <Plant {...plant} />
     </TouchableOpacity>
   );
 

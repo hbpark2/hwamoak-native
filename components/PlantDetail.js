@@ -10,6 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { gql, useMutation } from "@apollo/client";
+import Swiper from "react-native-swiper";
 
 const TOGGLE_PLANT_LIKE_MUTATION = gql`
   mutation togglePlantLike($id: Int!) {
@@ -46,7 +47,7 @@ const CaptionText = styled.Text`
 
 const File = styled.Image`
   max-width: 100%;
-  max-height: 400px;
+  max-height: 500px;
   margin: 0 auto 10px;
 `;
 
@@ -83,13 +84,13 @@ const PlantDetail = ({
   const { width, height } = useWindowDimensions();
   const [imageHeight, setImageHeight] = useState(height - 350);
 
-  useEffect(() => {
-    if (images[0].file) {
-      Image.getSize(images[0].file, (width, height) => {
-        setImageHeight(height);
-      });
-    }
-  }, [images[0].file]);
+  // useEffect(() => {
+  //   if (images[0].file) {
+  //     Image.getSize(images[0].file, (width, height) => {
+  //       setImageHeight(height);
+  //     });
+  //   }
+  // }, [images[0].file]);
 
   const updateToggleLike = (cache, result) => {
     const {
@@ -136,14 +137,34 @@ const PlantDetail = ({
       {/* <Header>
         <TitleText>{title}</TitleText>
       </Header> */}
-      <File
+
+      <Swiper
+        style={{ height: imageHeight }}
+        showsPagination={true}
+        dotColor="rgba(255,255,255,0.5)"
+        activeDotColor="rgba(255,255,255,1)"
+      >
+        {images?.map((item, index) => (
+          <File
+            key={index}
+            resizeMode="cover"
+            style={{
+              width,
+              height: imageHeight,
+            }}
+            source={{ uri: item.file }}
+          />
+        ))}
+      </Swiper>
+
+      {/* <File
         resizeMode="cover"
         source={{ uri: images[0]?.file }}
         style={{
           width,
           height: imageHeight,
         }}
-      />
+      /> */}
       <CaptionContainer>
         <CaptionText>
           {caption.split("<br />").map((line, index) => {

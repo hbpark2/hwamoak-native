@@ -67,7 +67,7 @@ const NotificationItem = ({ id, notificationType, sendUser, photo }) => {
             : "에 댓글을 달았습니다."}
         </Caption>
       </Left>
-      <Photo source={{ uri: photo?.file }} size="cover" />
+      <Photo source={{ uri: photo?.images[0]?.file }} size="cover" />
     </Container>
   );
 };

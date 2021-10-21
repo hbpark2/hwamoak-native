@@ -9,7 +9,6 @@ import { AppearanceProvider } from "react-native-appearance";
 import { Appearance, SafeAreaView, StatusBar, Text } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, lightTheme, Styles } from "./Styles";
-import { useEffect } from "react";
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
 import client, { isLoggedInVar, tokenVar, cache } from "./apollo";
 import LoggedInNav from "./navigators/LoggedInNav";
@@ -26,6 +25,7 @@ export default function App() {
     const fontPromises = fontsToLoad.map((font) => Font.loadAsync(font));
     const imagesToLoad = [require("./assets/flower-pot.png")];
     const imagePromises = imagesToLoad.map((image) => Asset.loadAsync(image));
+
     return Promise.all([...fontPromises, ...imagePromises]);
   };
 
@@ -61,8 +61,7 @@ export default function App() {
       />
     );
   }
-  // console.log(mode);
-  // console.log(`isLoggedIn : ${isLoggedIn}`);
+
   return (
     <ApolloProvider client={client}>
       <AppearanceProvider>

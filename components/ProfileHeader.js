@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import { Ionicons } from "@expo/vector-icons";
@@ -250,6 +250,14 @@ export default ProfileHeader = ({
     });
   };
 
+  const goToEditProfile = () => {
+    navigation.navigate("EditProfile", {
+      avatar,
+      username,
+      id: meData.me.id,
+    });
+  };
+
   return (
     <Container>
       <Header>
@@ -283,7 +291,7 @@ export default ProfileHeader = ({
           </SendMessageBtn>
         </BtnContainer>
       ) : (
-        <SettingBtn>
+        <SettingBtn onPress={goToEditProfile}>
           <SettingBtnText>프로필 수정</SettingBtnText>
         </SettingBtn>
       )}

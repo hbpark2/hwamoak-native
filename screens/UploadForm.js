@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { ReactNativeFile } from "apollo-upload-client";
 import { useForm } from "react-hook-form";
@@ -7,15 +7,19 @@ import styled from "styled-components/native";
 import DismissKeyboard from "../components/DismissKeyboard";
 import { Styles } from "../Styles";
 import { FEED_PHOTO } from "../fragments";
+import Swiper from "react-native-swiper";
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
-  padding: 0 50px;
+  padding: 10px 30px 0;
   background-color: ${(props) => props.theme.background};
 `;
 
 const Photo = styled.Image`
-  height: 350px;
+  flex: 1;
+  height: 300px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CaptionContainer = styled.View`
@@ -35,9 +39,13 @@ const HeaderRightText = styled.Text`
   margin-right: 7px;
 `;
 
+const SwiperWrap = styled.View`
+  flex: 1;
+`;
+
 const UPLOAD_PHOTO_MUTATION = gql`
-  mutation uploadPhoto($file: Upload!, $caption: String) {
-    uploadPhoto(file: $file, caption: $caption) {
+  mutation uploadPhoto($images: [Upload]!, $caption: String) {
+    uploadPhoto(images: $images, caption: $caption) {
       ...FeedPhoto
     }
   }
@@ -45,11 +53,13 @@ const UPLOAD_PHOTO_MUTATION = gql`
 `;
 
 const UploadForm = ({ route, navigation }) => {
+  const { register, handleSubmit, setValue } = useForm();
+
   const updateUploadPhoto = (cache, result) => {
     const {
       data: { uploadPhoto },
     } = result;
-    console.log(uploadPhoto);
+
     if (uploadPhoto.id) {
       cache.modify({
         id: "ROOT_QUERY",
@@ -70,7 +80,6 @@ const UploadForm = ({ route, navigation }) => {
     }
   );
 
-  const { register, handleSubmit, setValue } = useForm();
   const HeaderRight = () => (
     <TouchableOpacity onPress={handleSubmit(onValid)}>
       <HeaderRightText>Next</HeaderRightText>
@@ -92,32 +101,71 @@ const UploadForm = ({ route, navigation }) => {
     });
   }, [loading]);
 
-  const onValid = ({ caption }) => {
-    const file = new ReactNativeFile({
-      uri: route.params.file,
-      name: `1.jpg`,
-      type: "image/jpeg",
+  const onValid = async ({ caption }) => {
+    // Caption null Check
+    // if (!caption) {
+    //   alert("Caption can't have null");
+    //   return;
+    // }
+    let fileList = [];
+    await route.params.file.map((item, index) => {
+      const file = new ReactNativeFile({
+        uri: item,
+        name: `photo${index}.jpg`,
+        type: "image/jpeg",
+      });
+
+      return fileList.push(file);
     });
+
     uploadPhotoMutation({
       variables: {
-        caption,
-        file,
+        caption: caption ? caption : "",
+        images: fileList,
       },
     });
   };
+
   return (
     <DismissKeyboard>
       <Container>
-        <Photo source={{ uri: route.params.file }} resizeMode="contain" />
-        <CaptionContainer>
-          <Caption
-            placeholder="Write a caption..."
-            placeholderTextColor="#333"
-            onSubmitEditing={handleSubmit(onValid)}
-            returnKeyType="done"
-            onChangeText={(text) => setValue("caption", text)}
-          />
-        </CaptionContainer>
+        {!loading ? (
+          <>
+            {route.params.file.length > 1 ? (
+              <SwiperWrap>
+                <Swiper
+                  style={{ height: 150 }}
+                  showsButtons={false}
+                  dotColor="rgba(255,255,255,0.5)"
+                  activeDotColor="rgba(255,255,255,1)"
+                >
+                  {route.params.file?.map((item, index) => (
+                    <Photo
+                      key={index}
+                      source={{ uri: item }}
+                      resizeMode="contain"
+                    />
+                  ))}
+                </Swiper>
+              </SwiperWrap>
+            ) : (
+              <Photo
+                source={{ uri: route.params.file[0] }}
+                resizeMode="contain"
+              />
+            )}
+
+            <CaptionContainer>
+              <Caption
+                placeholder="Write a caption..."
+                placeholderTextColor="#333"
+                onSubmitEditing={handleSubmit(onValid)}
+                returnKeyType="done"
+                onChangeText={(text) => setValue("caption", text)}
+              />
+            </CaptionContainer>
+          </>
+        ) : null}
       </Container>
     </DismissKeyboard>
   );

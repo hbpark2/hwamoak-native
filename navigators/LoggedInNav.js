@@ -5,6 +5,8 @@ import UploadNav from "./UploadNav";
 import UploadForm from "../screens/UploadForm";
 import { Ionicons } from "@expo/vector-icons";
 import MessagesNav from "./MessagesNav";
+import EditProfile from "../screens/EditProfile";
+import PhotoAlbum from "../screens/PhotoAlbum";
 
 const Stack = createStackNavigator();
 
@@ -37,6 +39,23 @@ const LoggedInNav = () => {
         }}
         component={UploadForm}
       />
+      <Stack.Screen
+        name="EditProfile"
+        options={{
+          headerBackImage: ({ tintColor }) => (
+            <Ionicons color={tintColor} name="close" size={28} />
+          ),
+          headerBackTitleVisible: false,
+          title: "프로필 수정",
+          headerTintColor: "#333",
+          headerStyle: {
+            backgroundColor: "#fffef2",
+            shadowOpacity: 1,
+          },
+        }}
+        component={EditProfile}
+      />
+
       <Stack.Screen
         name="Messages"
         component={MessagesNav}
